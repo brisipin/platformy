@@ -1,0 +1,33 @@
+name: Plan
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  set-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.json }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: matrix
+        run: |
+          echo 'json<<EOF' >> $GITHUB_OUTPUT
+          jq -c '{include: .}' .github/env-stacks.json >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+  terraform:
+    needs: set-matrix
+    uses: ./.github/workflows/shared.yml
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.set-matrix.outputs.matrix) }}
+    with:
+      environment: ${{ matrix.environment }}
+      working_directory: ${{ matrix.working_directory }}
+      auto_apply: false
+    secrets: inherit

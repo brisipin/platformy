@@ -1,4 +1,4 @@
-name: Main Plan/Apply Resuable Flow
+name: Plan/Apply (reusable)
 
 on:
   workflow_call:
