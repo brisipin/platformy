@@ -35,8 +35,8 @@ variable "do_token" {
 module "do_token" {
   source = "../../../modules/secrets"
 
-  secret_name    = "staging/do-api-token"
-  description    = "DigitalOcean API token for staging (used by DOKS, Droplets, etc.)."
-  secret_string  = var.do_token
-  tags           = {}
+  secret_name   = "staging/do-api-token"
+  description   = "DigitalOcean API token for staging (used by DOKS, Droplets, etc.)."
+  secret_string = var.do_token
+  tags          = {}
 }
