@@ -28,8 +28,8 @@ variable "tags" {
 
 variable "kubernetes_version" {
   type        = string
-  default     = null
-  description = "Kubernetes version slug. If null, provider default (latest) is used."
+  default     = "1.29.6-do.0"
+  description = "Kubernetes version slug (e.g. 1.29.6-do.0)."
 }
 
 variable "auto_upgrade" {
