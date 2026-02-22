@@ -23,3 +23,12 @@ jobs:
       working_directory: ./env/staging/test-bucket
       auto_apply: true
     secrets: inherit
+
+  staging-secrets:
+    uses: ./.github/workflows/shared.yml
+    with:
+      environment: staging
+      working_directory: ./env/staging/secrets
+      auto_apply: true
+    secrets: inherit
+
