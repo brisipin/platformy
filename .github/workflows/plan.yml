@@ -30,4 +30,5 @@ jobs:
       environment: ${{ matrix.environment }}
       working_directory: ${{ matrix.working_directory }}
       auto_apply: false
+      pr_number: ${{ github.event.pull_request.number }}
     secrets: inherit
