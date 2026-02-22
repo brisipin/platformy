@@ -1,4 +1,4 @@
-name: Main Plan/Apply Resuable Flow
+name: Plan/Apply (reusable)
 
 on:
   workflow_call:
@@ -13,6 +13,10 @@ on:
         required: false
         type: boolean
         default: false
+      pr_number:
+        required: false
+        type: number
+        default: 0
 
 permissions:
   contents: read
@@ -56,8 +60,41 @@ jobs:
     
     - name: Tofu Plan
       id: plan
-      run: tofu plan -out=tfplan -no-color
+      run: tofu plan -out=tfplan -no-color 2>&1 | tee plan_output.txt
       continue-on-error: true
+
+    - name: Comment Plan on PR
+      if: ${{ inputs.pr_number > 0 && !inputs.auto_apply }}
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+          const pr = ${{ inputs.pr_number }};
+          const wd = '${{ inputs.working_directory }}';
+          const planPath = path.join(process.env.GITHUB_WORKSPACE, wd, 'plan_output.txt');
+          let body = '';
+          try {
+            body = fs.readFileSync(planPath, 'utf8');
+          } catch (e) {
+            body = '(plan output not found)';
+          }
+          const maxLen = 60000;
+          if (body.length > maxLen) body = body.slice(0, maxLen) + '\n...(truncated)';
+          const escaped = body.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          const commentBody = `## OpenTofu Plan: \`${wd}\`\n\n<pre>${escaped}</pre>`;
+          const { data: comments } = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: pr,
+          });
+          const botComment = comments.find(c => c.user.type === 'Bot' && c.body.includes(`OpenTofu Plan: \`${wd}\``));
+          const payload = { owner: context.repo.owner, repo: context.repo.repo, body: commentBody };
+          if (botComment) {
+            await github.rest.issues.updateComment({ ...payload, comment_id: botComment.id });
+          } else {
+            await github.rest.issues.createComment({ ...payload, issue_number: pr });
+          }
 
     - name: Tofu Apply
       id: apply

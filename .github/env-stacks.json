@@ -1,0 +1,7 @@
+[
+  {"environment": "staging", "working_directory": "./env/staging"},
+  {"environment": "staging", "working_directory": "./env/staging/test-bucket"},
+  {"environment": "staging", "working_directory": "./env/staging/secrets"},
+  {"environment": "prod", "working_directory": "./env/prod/doks"},
+  {"environment": "prod", "working_directory": "./env/prod/platform-droplet"}
+]
