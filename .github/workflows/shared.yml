@@ -57,7 +57,6 @@ jobs:
     - name: Tofu Plan
       id: plan
       run: tofu plan -out=tfplan -no-color
-      continue-on-error: true
 
     - name: Tofu Apply
       id: apply
