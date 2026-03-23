@@ -49,8 +49,8 @@ variable "github_oidc_provider_arn" {
 
 variable "budget_alert_emails" {
   type        = list(string)
-  default     = []
-  description = "Emails for monthly $50 (configurable) AWS Budget alerts. Set in tfvars or CI; confirm AWS subscription emails."
+  default     = ["bsipin@gmail.com"]
+  description = "Emails for monthly AWS Budget alerts; confirm subscription in inbox. Override in tfvars if needed."
 }
 
 variable "budget_monthly_usd" {
