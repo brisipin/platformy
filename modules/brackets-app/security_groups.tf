@@ -1,7 +1,7 @@
 resource "aws_security_group" "ec2" {
   name_prefix = "${var.name_prefix}-ec2-"
   description = "App port from allowed CIDRs only"
-  vpc_id      = data.aws_default_vpc.this.id
+  vpc_id      = data.aws_vpc.default.id
 
   ingress {
     description = "FastAPI"
