@@ -1,6 +1,11 @@
 output "api_base_url" {
-  value       = var.certificate_arn != "" ? "https://${aws_lb.this.dns_name}" : "http://${aws_lb.this.dns_name}"
-  description = "Base URL for the frontend (ALB). Send API key in header (e.g. X-API-Key)."
+  value       = "http://${length(aws_eip.app) > 0 ? aws_eip.app[0].public_ip : aws_instance.app.public_ip}:${var.app_port}"
+  description = "Base URL for the frontend. HTTP only; add TLS on the instance or in front (e.g. Cloudflare) if needed."
+}
+
+output "api_public_ip" {
+  value       = length(aws_eip.app) > 0 ? aws_eip.app[0].public_ip : aws_instance.app.public_ip
+  description = "Public IPv4 for the API (Elastic IP when associate_elastic_ip is true)."
 }
 
 output "api_key" {
@@ -47,11 +52,6 @@ output "aws_region" {
 output "github_oidc_provider_arn" {
   value       = length(var.github_actions_ecr_push_repositories) > 0 && local.github_oidc_provider_arn_resolved != "" ? local.github_oidc_provider_arn_resolved : null
   description = "OIDC provider ARN used in the push role trust policy."
-}
-
-output "alb_dns_name" {
-  value       = aws_lb.this.dns_name
-  description = "ALB DNS hostname."
 }
 
 output "instance_id" {

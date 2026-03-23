@@ -1,6 +1,6 @@
 # brackets-app
 
-ECR + cheapest Graviton EC2 (`t4g.micro`) + ALB. API key in Secrets Manager, injected into the container at boot. SQLite directory on instance disk at `/opt/brackets-data` (mounted to `/data` in the container).
+ECR + cheapest Graviton EC2 (`t4g.micro`), **no load balancer**. The app is reachable on the instance **public IP** (optional **Elastic IP** for a stable URL) on `app_port`. API key in Secrets Manager, injected into the container at boot. SQLite on `/opt/brackets-data` → `/data` in the container.
 
 ## Container image
 
@@ -11,12 +11,16 @@ ECR + cheapest Graviton EC2 (`t4g.micro`) + ALB. API key in Secrets Manager, inj
 ## FastAPI expectations
 
 - Read `API_KEY` from the environment and reject requests without a matching `X-API-Key` (or `Authorization: Bearer`) header.
-- Expose `GET /health` returning 200 for the ALB health check (or set `health_check_path`).
 - Restrict CORS to your S3 website origin (not `*` in production).
 
-## HTTPS
+## TLS
 
-Set `certificate_arn` (ACM in the same region as the ALB) to enable TLS on 443 and redirect HTTP to HTTPS.
+Traffic is **HTTP** to the instance. For HTTPS, use a reverse proxy on the box, **Cloudflare** in front of the IP, or another pattern you prefer.
+
+## Network
+
+- Default VPC, first subnet (must route to the internet for pull + clients).
+- `allowed_ingress_cidr_blocks` defaults to `0.0.0.0/0`; narrow to your IP or VPN if you can.
 
 ## New deployment / environment
 

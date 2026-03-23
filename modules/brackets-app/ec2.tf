@@ -5,6 +5,8 @@ resource "aws_instance" "app" {
   vpc_security_group_ids = [aws_security_group.ec2.id]
   iam_instance_profile   = aws_iam_instance_profile.ec2.name
 
+  associate_public_ip_address = !var.associate_elastic_ip
+
   user_data = base64encode(templatefile("${path.module}/user_data.sh.tpl", {
     region            = data.aws_region.current.name
     ecr_registry_host = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com"

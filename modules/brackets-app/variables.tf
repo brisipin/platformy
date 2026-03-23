@@ -21,22 +21,16 @@ variable "app_port" {
   description = "Container port FastAPI listens on."
 }
 
-variable "health_check_path" {
-  type        = string
-  default     = "/health"
-  description = "ALB health check path; expose this in FastAPI (GET returns 200)."
-}
-
-variable "certificate_arn" {
-  type        = string
-  default     = ""
-  description = "ACM certificate ARN in this region for HTTPS listener. Leave empty for HTTP-only ALB."
-}
-
-variable "enable_deletion_protection" {
+variable "associate_elastic_ip" {
   type        = bool
-  default     = false
-  description = "Set true for production ALB."
+  default     = true
+  description = "Allocate an Elastic IP so the API URL stays stable across instance replacement."
+}
+
+variable "allowed_ingress_cidr_blocks" {
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+  description = "CIDRs allowed to reach app_port on the instance (tighten for your IP or VPN)."
 }
 
 variable "tags" {

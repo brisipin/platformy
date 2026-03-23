@@ -10,11 +10,6 @@ data "aws_subnets" "default" {
   }
 }
 
-data "aws_subnet" "default" {
-  for_each = toset(data.aws_subnets.default.ids)
-  id       = each.value
-}
-
 data "aws_ami" "al2023_arm" {
   most_recent = true
   owners      = ["amazon"]
