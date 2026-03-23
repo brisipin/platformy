@@ -24,7 +24,7 @@ Copy `env/staging/brackets-app`, change `name_prefix` and backend state key, ins
 
 ## GitHub Actions → ECR push (OIDC)
 
-Set `github_actions_ecr_push_repositories` (e.g. `["myorg/my-app"]`) on the module. Outputs: `ecr_push_role_arn`, `ecr_repository_url`, `aws_account_id`, `aws_region`, `github_oidc_provider_arn`.
+Set `github_actions_ecr_push_repositories` (staging default: `["brisipin/brackets"]`) on the module. Outputs: `ecr_push_role_arn`, `ecr_repository_url`, `aws_account_id`, `aws_region`, `github_oidc_provider_arn`.
 
 If this AWS account has **no** GitHub OIDC provider yet, set `create_github_oidc_provider = true` **once** (or create it manually and pass `github_oidc_provider_arn`).
 
