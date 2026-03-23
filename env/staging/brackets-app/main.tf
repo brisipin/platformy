@@ -66,11 +66,11 @@ module "brackets_app" {
   ecr_image_tag = "latest"
 
   github_actions_ecr_push_repositories = var.github_app_repositories
-  create_github_oidc_provider = var.create_github_oidc_provider
-  github_oidc_provider_arn    = var.github_oidc_provider_arn
+  create_github_oidc_provider          = var.create_github_oidc_provider
+  github_oidc_provider_arn             = var.github_oidc_provider_arn
 
-  budget_alert_emails  = var.budget_alert_emails
-  budget_monthly_usd   = var.budget_monthly_usd
+  budget_alert_emails = var.budget_alert_emails
+  budget_monthly_usd  = var.budget_monthly_usd
 
   tags = {
     App = "brackets"

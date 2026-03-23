@@ -21,6 +21,12 @@ variable "app_port" {
   description = "Container port FastAPI listens on."
 }
 
+variable "root_volume_size_gb" {
+  type        = number
+  default     = 30
+  description = "Root gp3 volume size (GiB). Must be >= AMI snapshot minimum (AL2023 ARM often requires 30)."
+}
+
 variable "associate_elastic_ip" {
   type        = bool
   default     = true
