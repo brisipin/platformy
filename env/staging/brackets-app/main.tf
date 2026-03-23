@@ -37,8 +37,8 @@ variable "github_app_repositories" {
 
 variable "create_github_oidc_provider" {
   type        = bool
-  default     = false
-  description = "Set true once per AWS account if GitHub OIDC provider is not created yet."
+  default     = true
+  description = "Create GitHub OIDC provider in this account (once). Set false if it already exists; then use github_oidc_provider_arn or rely on data lookup."
 }
 
 variable "github_oidc_provider_arn" {
