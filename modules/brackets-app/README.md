@@ -22,6 +22,12 @@ Traffic is **HTTP** to the instance. For HTTPS, use a reverse proxy on the box, 
 - Default VPC, first subnet (must route to the internet for pull + clients).
 - `allowed_ingress_cidr_blocks` defaults to `0.0.0.0/0`; narrow to your IP or VPN if you can.
 
+## Cost budget (optional)
+
+Set `budget_alert_emails` (non-empty) to create an **AWS Budget** scoped by tag `budget_cost_tag_key` / value (defaults to `App` = value from `tags` or `name_prefix`). Monthly limit defaults to **$50** (`budget_monthly_usd`). Alerts at **80% actual**, **100% actual**, and **100% forecasted**.
+
+In **Billing → Cost allocation tags**, activate the tag key you use (e.g. `App`) so the filter matches spend. Confirm **email subscription** links AWS sends. The IAM principal running OpenTofu needs `budgets:*` (or `budgets:ModifyBudget`, `budgets:ViewBudget`).
+
 ## New deployment / environment
 
 Copy `env/staging/brackets-app`, change `name_prefix` and backend state key, instantiate the module again.

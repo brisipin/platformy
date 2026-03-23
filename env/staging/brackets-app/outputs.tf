@@ -24,3 +24,7 @@ output "aws_account_id" {
 output "aws_region" {
   value = module.brackets_app.aws_region
 }
+
+output "cost_budget_id" {
+  value = module.brackets_app.cost_budget_id
+}

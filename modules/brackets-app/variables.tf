@@ -56,3 +56,39 @@ variable "github_oidc_provider_arn" {
   default     = ""
   description = "Existing IAM OIDC provider ARN for https://token.actions.githubusercontent.com. Overrides lookup/create when set."
 }
+
+variable "create_cost_budget" {
+  type        = bool
+  default     = true
+  description = "Create an AWS Budget for monthly cost alerts (requires budget_alert_emails)."
+}
+
+variable "budget_monthly_usd" {
+  type        = number
+  default     = 50
+  description = "Monthly cost budget in USD (alerts at 80% actual, 100% actual, 100% forecasted)."
+}
+
+variable "budget_alert_emails" {
+  type        = list(string)
+  default     = []
+  description = "Emails for AWS Budget notifications (confirm subscriptions in inbox). Empty = no budget created."
+}
+
+variable "budget_cost_tag_key" {
+  type        = string
+  default     = "App"
+  description = "Cost allocation tag key used to scope the budget to this stack. Activate this tag under Billing > Cost allocation tags."
+}
+
+variable "budget_cost_tag_value" {
+  type        = string
+  default     = ""
+  description = "Tag value for the budget filter. If empty, uses tags[budget_cost_tag_key] or name_prefix."
+}
+
+variable "budget_time_period_start" {
+  type        = string
+  default     = "2025-01-01_00:00"
+  description = "Budget period start (YYYY-MM-DD_HH:MM, UTC). Must be first day of a month."
+}

@@ -58,3 +58,8 @@ output "instance_id" {
   value       = aws_instance.app.id
   description = "EC2 instance id (SQLite data on instance disk until you add backups)."
 }
+
+output "cost_budget_id" {
+  value       = length(aws_budgets_budget.app) > 0 ? aws_budgets_budget.app[0].id : null
+  description = "AWS Budget id when cost budget is created."
+}

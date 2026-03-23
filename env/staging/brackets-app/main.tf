@@ -47,6 +47,18 @@ variable "github_oidc_provider_arn" {
   description = "Use existing OIDC provider ARN instead of create or data lookup."
 }
 
+variable "budget_alert_emails" {
+  type        = list(string)
+  default     = []
+  description = "Emails for monthly $50 (configurable) AWS Budget alerts. Set in tfvars or CI; confirm AWS subscription emails."
+}
+
+variable "budget_monthly_usd" {
+  type        = number
+  default     = 50
+  description = "Monthly budget threshold in USD."
+}
+
 module "brackets_app" {
   source = "../../../modules/brackets-app"
 
@@ -56,6 +68,9 @@ module "brackets_app" {
   github_actions_ecr_push_repositories = var.github_app_repositories
   create_github_oidc_provider = var.create_github_oidc_provider
   github_oidc_provider_arn    = var.github_oidc_provider_arn
+
+  budget_alert_emails  = var.budget_alert_emails
+  budget_monthly_usd   = var.budget_monthly_usd
 
   tags = {
     App = "brackets"
