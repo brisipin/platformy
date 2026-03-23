@@ -1,6 +1,6 @@
 terraform {
   required_version = ">= 1.6.0"
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -16,7 +16,7 @@ provider "aws" {
 module "staging_backend" {
   source = "../modules/opentofu-backend"
 
-  environment          = "staging"
-  bucket_name          = "staging-terraform-state-12093"
+  environment = "staging"
+  bucket_name = "staging-terraform-state-12093"
 }
 

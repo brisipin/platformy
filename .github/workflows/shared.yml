@@ -45,8 +45,8 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
     
     - name: Tofu Format Check
+      working-directory: ${{ github.workspace }}
       run: tofu fmt -check -recursive
-      continue-on-error: true
     
     - name: Tofu Init
       run: tofu init
