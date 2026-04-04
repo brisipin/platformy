@@ -63,3 +63,18 @@ output "cost_budget_id" {
   value       = length(aws_budgets_budget.app) > 0 ? aws_budgets_budget.app[0].id : null
   description = "AWS Budget id when cost budget is created."
 }
+
+output "frontend_bucket_name" {
+  value       = length(aws_s3_bucket.frontend) > 0 ? aws_s3_bucket.frontend[0].bucket : null
+  description = "S3 bucket name for the static frontend. Set as S3_BUCKET GitHub Actions secret."
+}
+
+output "cloudfront_distribution_id" {
+  value       = length(aws_cloudfront_distribution.frontend) > 0 ? aws_cloudfront_distribution.frontend[0].id : null
+  description = "CloudFront distribution ID. Set as CLOUDFRONT_DISTRIBUTION_ID GitHub Actions secret."
+}
+
+output "cloudfront_domain_name" {
+  value       = length(aws_cloudfront_distribution.frontend) > 0 ? aws_cloudfront_distribution.frontend[0].domain_name : null
+  description = "CloudFront domain (e.g. d1234.cloudfront.net). Access the frontend here until you add a custom domain."
+}
