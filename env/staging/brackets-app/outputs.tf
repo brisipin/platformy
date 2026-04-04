@@ -51,6 +51,11 @@ output "cost_budget_id" {
   value = module.brackets_app.cost_budget_id
 }
 
+output "api_cdn_url" {
+  value       = module.brackets_app.api_cdn_url
+  description = "Set as VITE_API_BASE_URL GitHub Actions secret."
+}
+
 output "frontend_bucket_name" {
   value       = module.brackets_app.frontend_bucket_name
   description = "Set as S3_BUCKET GitHub Actions secret."

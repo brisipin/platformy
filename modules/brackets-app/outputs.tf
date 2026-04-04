@@ -64,6 +64,11 @@ output "cost_budget_id" {
   description = "AWS Budget id when cost budget is created."
 }
 
+output "api_cdn_url" {
+  value       = "https://${aws_cloudfront_distribution.api.domain_name}"
+  description = "HTTPS URL for the API via CloudFront. Set as VITE_API_BASE_URL GitHub Actions secret."
+}
+
 output "frontend_bucket_name" {
   value       = length(aws_s3_bucket.frontend) > 0 ? aws_s3_bucket.frontend[0].bucket : null
   description = "S3 bucket name for the static frontend. Set as S3_BUCKET GitHub Actions secret."
