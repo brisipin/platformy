@@ -3,6 +3,11 @@ output "api_base_url" {
   description = "Configure frontend to call this base URL."
 }
 
+output "api_public_ip" {
+  value       = module.brackets_app.api_public_ip
+  description = "EC2 public IP. Set as EC2_HOST GitHub Actions secret."
+}
+
 output "api_key" {
   value       = module.brackets_app.api_key
   sensitive   = true
