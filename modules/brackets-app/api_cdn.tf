@@ -1,5 +1,6 @@
 locals {
-  api_origin_domain = length(aws_eip.app) > 0 ? aws_eip.app[0].public_ip : aws_instance.app.public_ip
+  api_origin_ip     = length(aws_eip.app) > 0 ? aws_eip.app[0].public_ip : aws_instance.app.public_ip
+  api_origin_domain = "ec2-${replace(local.api_origin_ip, ".", "-")}.${data.aws_region.current.name}.compute.amazonaws.com"
 }
 
 resource "aws_cloudfront_distribution" "api" {
