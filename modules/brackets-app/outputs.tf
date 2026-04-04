@@ -79,6 +79,12 @@ output "cloudfront_domain_name" {
   description = "CloudFront domain (e.g. d1234.cloudfront.net). Access the frontend here until you add a custom domain."
 }
 
+output "ec2_ssh_private_key" {
+  value       = tls_private_key.ec2_ssh.private_key_openssh
+  sensitive   = true
+  description = "ED25519 private key for SSH access to the EC2 instance. Set as EC2_SSH_KEY GitHub Actions secret."
+}
+
 output "jwt_secret_key" {
   value       = random_password.jwt_secret_key.result
   sensitive   = true

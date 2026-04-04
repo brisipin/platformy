@@ -4,6 +4,7 @@ resource "aws_instance" "app" {
   subnet_id              = local.instance_subnet_id
   vpc_security_group_ids = [aws_security_group.ec2.id]
   iam_instance_profile   = aws_iam_instance_profile.ec2.name
+  key_name               = aws_key_pair.ec2_ssh.key_name
 
   associate_public_ip_address = !var.associate_elastic_ip
 
