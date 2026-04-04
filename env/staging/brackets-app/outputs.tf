@@ -14,6 +14,17 @@ output "api_key" {
   description = "Pass to frontend as build-time secret (e.g. GitHub Actions env), not committed."
 }
 
+output "jwt_secret_key" {
+  value       = module.brackets_app.jwt_secret_key
+  sensitive   = true
+  description = "Set as JWT_SECRET_KEY GitHub Actions secret."
+}
+
+output "cors_allowed_origins" {
+  value       = module.brackets_app.cors_allowed_origins
+  description = "Set as CORS_ALLOWED_ORIGINS GitHub Actions secret."
+}
+
 output "ecr_repository_url" {
   value = module.brackets_app.ecr_repository_url
 }

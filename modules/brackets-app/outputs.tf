@@ -78,3 +78,14 @@ output "cloudfront_domain_name" {
   value       = length(aws_cloudfront_distribution.frontend) > 0 ? aws_cloudfront_distribution.frontend[0].domain_name : null
   description = "CloudFront domain (e.g. d1234.cloudfront.net). Access the frontend here until you add a custom domain."
 }
+
+output "jwt_secret_key" {
+  value       = random_password.jwt_secret_key.result
+  sensitive   = true
+  description = "JWT signing secret. Set as JWT_SECRET_KEY GitHub Actions secret."
+}
+
+output "cors_allowed_origins" {
+  value       = length(aws_cloudfront_distribution.frontend) > 0 ? "https://${aws_cloudfront_distribution.frontend[0].domain_name}" : null
+  description = "CORS origin to allow (CloudFront URL). Set as CORS_ALLOWED_ORIGINS GitHub Actions secret."
+}
