@@ -98,3 +98,9 @@ variable "budget_time_period_start" {
   default     = "2025-01-01_00:00"
   description = "Budget period start (YYYY-MM-DD_HH:MM, UTC). Must be first day of a month."
 }
+
+variable "create_frontend_hosting" {
+  type        = bool
+  default     = true
+  description = "Create S3 bucket + CloudFront distribution for the static frontend. Also grants the GitHub Actions role permission to sync S3 and invalidate CloudFront."
+}

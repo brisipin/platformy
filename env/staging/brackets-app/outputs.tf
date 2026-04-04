@@ -28,3 +28,18 @@ output "aws_region" {
 output "cost_budget_id" {
   value = module.brackets_app.cost_budget_id
 }
+
+output "frontend_bucket_name" {
+  value       = module.brackets_app.frontend_bucket_name
+  description = "Set as S3_BUCKET GitHub Actions secret."
+}
+
+output "cloudfront_distribution_id" {
+  value       = module.brackets_app.cloudfront_distribution_id
+  description = "Set as CLOUDFRONT_DISTRIBUTION_ID GitHub Actions secret."
+}
+
+output "cloudfront_domain_name" {
+  value       = module.brackets_app.cloudfront_domain_name
+  description = "Frontend URL (until you add a custom domain)."
+}
