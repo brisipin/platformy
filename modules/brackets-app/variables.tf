@@ -39,6 +39,12 @@ variable "allowed_ingress_cidr_blocks" {
   description = "CIDRs allowed to reach app_port on the instance (tighten for your IP or VPN)."
 }
 
+variable "ssh_ingress_cidr_blocks" {
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+  description = "CIDRs allowed to reach port 22. Defaults to 0.0.0.0/0 so GitHub Actions can connect. Tighten to GitHub meta IP ranges or a bastion CIDR if desired."
+}
+
 variable "tags" {
   type        = map(string)
   default     = {}

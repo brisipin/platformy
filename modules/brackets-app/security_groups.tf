@@ -11,6 +11,14 @@ resource "aws_security_group" "ec2" {
     cidr_blocks = var.allowed_ingress_cidr_blocks
   }
 
+  ingress {
+    description = "SSH from GitHub Actions and allowed CIDRs"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = var.ssh_ingress_cidr_blocks
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
