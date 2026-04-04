@@ -14,6 +14,12 @@ output "api_key" {
   description = "Pass to frontend as build-time secret (e.g. GitHub Actions env), not committed."
 }
 
+output "ec2_ssh_private_key" {
+  value       = module.brackets_app.ec2_ssh_private_key
+  sensitive   = true
+  description = "Set as EC2_SSH_KEY GitHub Actions secret."
+}
+
 output "jwt_secret_key" {
   value       = module.brackets_app.jwt_secret_key
   sensitive   = true
