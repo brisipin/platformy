@@ -9,18 +9,29 @@ mkdir -p ${data_dir}
 chmod 700 ${data_dir}
 
 REGION="${region}"
-ECR_URI="${ecr_image_uri}"
+IMAGE="${ecr_image_uri}"
 
-aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin ${ecr_registry_host}
+aws ecr get-login-password --region "$REGION" \
+  | docker login --username AWS --password-stdin ${ecr_registry_host}
 
-API_KEY=$(aws secretsmanager get-secret-value --secret-id "${secret_arn}" --region "$REGION" --query SecretString --output text)
+JWT_SECRET=$(aws secretsmanager get-secret-value \
+  --secret-id "${jwt_secret_arn}" \
+  --region "$REGION" \
+  --query SecretString --output text)
 
-docker pull "$ECR_URI"
+docker pull "$IMAGE"
 
-docker rm -f brackets-app 2>/dev/null || true
-docker run -d --name brackets-app --restart unless-stopped \
+docker rm -f brackets-api 2>/dev/null || true
+
+docker run -d \
+  --name brackets-api \
+  --restart unless-stopped \
   -p ${app_port}:${app_port} \
-  -e API_KEY="$API_KEY" \
-  -e SQLITE_PATH=/data/app.db \
-  -v ${data_dir}:/data \
-  "$ECR_URI"
+  -v ${data_dir}:/app/data \
+  -e DATABASE_URL="sqlite:////app/data/bracket.db" \
+  -e BRACKET_DATABASE_URL="sqlite+aiosqlite:////app/data/bracket.db" \
+  -e JWT_SECRET_KEY="$JWT_SECRET" \
+  -e COOKIE_SECURE="true" \
+  -e CORS_ALLOWED_ORIGINS="${cors_allowed_origins}" \
+  "$IMAGE" \
+  sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port ${app_port}"

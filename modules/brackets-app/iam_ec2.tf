@@ -36,7 +36,10 @@ resource "aws_iam_role_policy" "ec2" {
       {
         Effect   = "Allow"
         Action   = ["secretsmanager:GetSecretValue"]
-        Resource = aws_secretsmanager_secret.api_key.arn
+        Resource = [
+          aws_secretsmanager_secret.api_key.arn,
+          aws_secretsmanager_secret.jwt_secret_key.arn,
+        ]
       }
     ]
   })
