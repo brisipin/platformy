@@ -24,12 +24,23 @@ resource "aws_cloudfront_origin_access_control" "frontend" {
 }
 
 locals {
-  api_ec2_ip     = length(aws_eip.app) > 0 ? aws_eip.app[0].public_ip : aws_instance.app.public_ip
-  api_ec2_domain = "ec2-${replace(local.api_ec2_ip, ".", "-")}.${data.aws_region.current.name}.compute.amazonaws.com"
+  # Use try() so this local only depends on aws_eip.app, not aws_instance.app.
+  # This breaks the cycle: aws_instance.app -> CloudFront -> local -> aws_instance.app.
+  # A lifecycle precondition on the CloudFront resource enforces that associate_elastic_ip
+  # must be true whenever create_frontend_hosting is true.
+  api_ec2_ip     = try(aws_eip.app[0].public_ip, "")
+  api_ec2_domain = local.api_ec2_ip != "" ? "ec2-${replace(local.api_ec2_ip, ".", "-")}.${data.aws_region.current.name}.compute.amazonaws.com" : ""
 }
 
 resource "aws_cloudfront_distribution" "frontend" {
   count = var.create_frontend_hosting ? 1 : 0
+
+  lifecycle {
+    precondition {
+      condition     = var.associate_elastic_ip
+      error_message = "create_frontend_hosting = true requires associate_elastic_ip = true for a stable EC2 origin domain."
+    }
+  }
 
   enabled             = true
   default_root_object = "index.html"
