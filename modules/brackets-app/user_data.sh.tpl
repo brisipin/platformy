@@ -34,4 +34,4 @@ docker run -d \
   -e COOKIE_SECURE="true" \
   -e CORS_ALLOWED_ORIGINS="${cors_allowed_origins}" \
   "$IMAGE" \
-  sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port ${app_port}"
+  sh -c "([ -f /app/data/bracket.db ] || litestream restore -config /etc/litestream.yml -if-replica-exists /app/data/bracket.db) && alembic upgrade head && litestream replicate -config /etc/litestream.yml -exec 'uvicorn main:app --host 0.0.0.0 --port ${app_port}'"
