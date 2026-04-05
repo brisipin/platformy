@@ -72,7 +72,15 @@ resource "aws_cloudfront_distribution" "frontend" {
 
   # API paths: forward to EC2 with no caching, all methods, all cookies/headers
   dynamic "ordered_cache_behavior" {
-    for_each = ["/auth/*", "/me/*", "/groups/*", "/teams/*", "/series/*", "/users/*", "/health"]
+    for_each = [
+      "/auth", "/auth/*",
+      "/me", "/me/*",
+      "/groups", "/groups/*",
+      "/teams", "/teams/*",
+      "/series", "/series/*",
+      "/users", "/users/*",
+      "/health",
+    ]
     content {
       path_pattern           = ordered_cache_behavior.value
       target_origin_id       = "ec2-api"
