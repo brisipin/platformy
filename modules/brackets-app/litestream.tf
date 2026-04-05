@@ -48,7 +48,7 @@ resource "aws_iam_role_policy" "github_etl" {
     Statement = [
       {
         Effect = "Allow"
-        Action = ["s3:GetObject", "s3:ListBucket"]
+        Action = ["s3:GetObject", "s3:ListBucket", "s3:GetBucketLocation"]
         Resource = [
           aws_s3_bucket.litestream.arn,
           "${aws_s3_bucket.litestream.arn}/*",
@@ -56,7 +56,7 @@ resource "aws_iam_role_policy" "github_etl" {
       },
       {
         Effect = "Allow"
-        Action = ["s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:ListBucket"]
+        Action = ["s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:ListBucket", "s3:GetBucketLocation"]
         Resource = [
           aws_s3_bucket.analytics.arn,
           "${aws_s3_bucket.analytics.arn}/*",
