@@ -40,6 +40,19 @@ resource "aws_iam_role_policy" "ec2" {
           aws_secretsmanager_secret.api_key.arn,
           aws_secretsmanager_secret.jwt_secret_key.arn,
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject",
+          "s3:ListBucket",
+        ]
+        Resource = [
+          aws_s3_bucket.litestream.arn,
+          "${aws_s3_bucket.litestream.arn}/*",
+        ]
       }
     ]
   })
