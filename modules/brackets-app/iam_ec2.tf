@@ -34,8 +34,8 @@ resource "aws_iam_role_policy" "ec2" {
         Resource = aws_ecr_repository.app.arn
       },
       {
-        Effect   = "Allow"
-        Action   = ["secretsmanager:GetSecretValue"]
+        Effect = "Allow"
+        Action = ["secretsmanager:GetSecretValue"]
         Resource = [
           aws_secretsmanager_secret.api_key.arn,
           aws_secretsmanager_secret.jwt_secret_key.arn,
