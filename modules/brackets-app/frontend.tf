@@ -23,6 +23,11 @@ resource "aws_cloudfront_origin_access_control" "frontend" {
   signing_protocol                  = "sigv4"
 }
 
+locals {
+  api_ec2_ip     = length(aws_eip.app) > 0 ? aws_eip.app[0].public_ip : aws_instance.app.public_ip
+  api_ec2_domain = "ec2-${replace(local.api_ec2_ip, ".", "-")}.${data.aws_region.current.name}.compute.amazonaws.com"
+}
+
 resource "aws_cloudfront_distribution" "frontend" {
   count = var.create_frontend_hosting ? 1 : 0
 
@@ -31,12 +36,27 @@ resource "aws_cloudfront_distribution" "frontend" {
   comment             = "${var.name_prefix} frontend"
   tags                = var.tags
 
+  # S3 origin — serves the React app
   origin {
     domain_name              = aws_s3_bucket.frontend[0].bucket_regional_domain_name
     origin_id                = "s3-frontend"
     origin_access_control_id = aws_cloudfront_origin_access_control.frontend[0].id
   }
 
+  # EC2 origin — serves the FastAPI backend
+  origin {
+    domain_name = local.api_ec2_domain
+    origin_id   = "ec2-api"
+
+    custom_origin_config {
+      http_port              = var.app_port
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
+
+  # Default: serve the React SPA from S3
   default_cache_behavior {
     target_origin_id       = "s3-frontend"
     viewer_protocol_policy = "redirect-to-https"
@@ -47,6 +67,22 @@ resource "aws_cloudfront_distribution" "frontend" {
     forwarded_values {
       query_string = false
       cookies { forward = "none" }
+    }
+  }
+
+  # API paths: forward to EC2 with no caching, all methods, all cookies/headers
+  dynamic "ordered_cache_behavior" {
+    for_each = ["/auth/*", "/me/*", "/groups/*", "/teams/*", "/series/*", "/users/*", "/health"]
+    content {
+      path_pattern           = ordered_cache_behavior.value
+      target_origin_id       = "ec2-api"
+      viewer_protocol_policy = "redirect-to-https"
+      allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+      cached_methods         = ["GET", "HEAD"]
+      compress               = false
+
+      cache_policy_id          = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad" # CachingDisabled
+      origin_request_policy_id = "b689b0a8-53d0-40ab-baf2-68738e2966ac" # AllViewerExceptHostHeader
     }
   }
 

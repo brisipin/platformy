@@ -66,7 +66,7 @@ output "cost_budget_id" {
 
 output "api_cdn_url" {
   value       = "https://${aws_cloudfront_distribution.api.domain_name}"
-  description = "HTTPS URL for the API via CloudFront. Set as VITE_API_BASE_URL GitHub Actions secret."
+  description = "Standalone API CloudFront URL (no longer needed for VITE_API_BASE_URL — API is now routed through the frontend distribution)."
 }
 
 output "frontend_bucket_name" {
