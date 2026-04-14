@@ -110,3 +110,8 @@ variable "create_frontend_hosting" {
   default     = true
   description = "Create S3 bucket + CloudFront distribution for the static frontend. Also grants the GitHub Actions role permission to sync S3 and invalidate CloudFront."
 }
+
+variable "database_url_secret_arn" {
+  type        = string
+  description = "AWS Secrets Manager ARN for the DATABASE_URL (Supabase PostgreSQL connection string). EC2 fetches this at startup."
+}
