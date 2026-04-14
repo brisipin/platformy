@@ -100,3 +100,8 @@ output "cors_allowed_origins" {
   value       = length(aws_cloudfront_distribution.frontend) > 0 ? "https://${aws_cloudfront_distribution.frontend[0].domain_name}" : null
   description = "CORS origin to allow (CloudFront URL). Set as CORS_ALLOWED_ORIGINS GitHub Actions secret."
 }
+
+output "backup_bucket_name" {
+  value       = aws_s3_bucket.backups.bucket
+  description = "S3 bucket for pg_dump backups. Set as BACKUP_BUCKET GitHub Actions secret."
+}

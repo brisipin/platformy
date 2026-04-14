@@ -70,3 +70,8 @@ output "cloudfront_domain_name" {
   value       = module.brackets_app.cloudfront_domain_name
   description = "Frontend URL (until you add a custom domain)."
 }
+
+output "backup_bucket_name" {
+  value       = module.brackets_app.backup_bucket_name
+  description = "Set as BACKUP_BUCKET GitHub Actions secret."
+}
