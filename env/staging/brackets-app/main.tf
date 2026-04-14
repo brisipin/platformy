@@ -33,9 +33,9 @@ provider "aws" {
 data "terraform_remote_state" "supabase" {
   backend = "s3"
   config = {
-    bucket  = "staging-terraform-state-12093"
-    key     = "staging/supabase/terraform.tfstate"
-    region  = "us-east-2"
+    bucket = "staging-terraform-state-12093"
+    key    = "staging/supabase/terraform.tfstate"
+    region = "us-east-2"
   }
 }
 
