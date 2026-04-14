@@ -29,12 +29,6 @@ provider "aws" {
   }
 }
 
-# Look up the database URL secret by its predictable name.
-# The supabase root must be applied before this root (enforced by needs: in CI).
-data "aws_secretsmanager_secret" "database_url" {
-  name = "brackets-staging/database-url"
-}
-
 variable "github_app_repositories" {
   type        = list(string)
   default     = ["brisipin/brackets"]
@@ -70,8 +64,6 @@ module "brackets_app" {
 
   name_prefix   = "brackets-staging"
   ecr_image_tag = "latest"
-
-  database_url_secret_arn = data.aws_secretsmanager_secret.database_url.arn
 
   github_actions_ecr_push_repositories = var.github_app_repositories
   create_github_oidc_provider          = var.create_github_oidc_provider

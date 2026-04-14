@@ -9,13 +9,13 @@ resource "aws_instance" "app" {
   associate_public_ip_address = !var.associate_elastic_ip
 
   user_data = base64encode(templatefile("${path.module}/user_data.sh.tpl", {
-    region                  = data.aws_region.current.name
-    ecr_registry_host       = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com"
-    ecr_image_uri           = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/${aws_ecr_repository.app.name}:${var.ecr_image_tag}"
-    app_port                = var.app_port
-    jwt_secret_arn          = aws_secretsmanager_secret.jwt_secret_key.arn
-    database_url_secret_arn = var.database_url_secret_arn
-    cors_allowed_origins    = var.create_frontend_hosting ? "https://${aws_cloudfront_distribution.frontend[0].domain_name}" : ""
+    region                   = data.aws_region.current.name
+    ecr_registry_host        = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com"
+    ecr_image_uri            = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/${aws_ecr_repository.app.name}:${var.ecr_image_tag}"
+    app_port                 = var.app_port
+    jwt_secret_arn           = aws_secretsmanager_secret.jwt_secret_key.arn
+    database_url_secret_name = "${var.name_prefix}/database-url"
+    cors_allowed_origins     = var.create_frontend_hosting ? "https://${aws_cloudfront_distribution.frontend[0].domain_name}" : ""
   }))
 
   metadata_options {

@@ -17,7 +17,7 @@ JWT_SECRET=$(aws secretsmanager get-secret-value \
   --query SecretString --output text)
 
 DATABASE_URL=$(aws secretsmanager get-secret-value \
-  --secret-id "${database_url_secret_arn}" \
+  --secret-id "${database_url_secret_name}" \
   --region "$REGION" \
   --query SecretString --output text)
 
