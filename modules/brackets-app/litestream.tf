@@ -1,3 +1,12 @@
+# ── Litestream bucket (removed — kept temporarily for clean destroy) ─────────
+# TODO: remove this block after the next successful apply deletes the bucket.
+
+resource "aws_s3_bucket" "litestream" {
+  bucket        = "${var.name_prefix}-litestream"
+  force_destroy = true
+  tags          = var.tags
+}
+
 # ── Analytics (Parquet output from ETL) ─────────────────────────────────────
 
 resource "aws_s3_bucket" "analytics" {
