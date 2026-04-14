@@ -29,14 +29,10 @@ provider "aws" {
   }
 }
 
-# Pull the database URL secret ARN from the supabase root's remote state.
-data "terraform_remote_state" "supabase" {
-  backend = "s3"
-  config = {
-    bucket = "staging-terraform-state-12093"
-    key    = "staging/supabase/terraform.tfstate"
-    region = "us-east-2"
-  }
+# Look up the database URL secret by its predictable name.
+# The supabase root must be applied before this root (enforced by needs: in CI).
+data "aws_secretsmanager_secret" "database_url" {
+  name = "brackets-staging/database-url"
 }
 
 variable "github_app_repositories" {
@@ -75,7 +71,7 @@ module "brackets_app" {
   name_prefix   = "brackets-staging"
   ecr_image_tag = "latest"
 
-  database_url_secret_arn = data.terraform_remote_state.supabase.outputs.database_url_secret_arn
+  database_url_secret_arn = data.aws_secretsmanager_secret.database_url.arn
 
   github_actions_ecr_push_repositories = var.github_app_repositories
   create_github_oidc_provider          = var.create_github_oidc_provider
