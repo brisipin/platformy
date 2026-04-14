@@ -23,37 +23,42 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
-    
+
     defaults:
       run:
         working-directory: ${{ inputs.working_directory }}
-    
+
+    env:
+      # Supabase provider vars — only consumed by the supabase root; ignored elsewhere.
+      TF_VAR_supabase_access_token: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      TF_VAR_supabase_organization_id: ${{ secrets.SUPABASE_ORGANIZATION_ID }}
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
+
     - name: Setup OpenTofu
       uses: opentofu/setup-opentofu@v1
       with:
         tofu_version: 1.6.0
-    
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
-    
+
     - name: Tofu Format Check
       working-directory: ${{ github.workspace }}
       run: tofu fmt -check -recursive
-    
+
     - name: Tofu Init
       run: tofu init
-    
+
     - name: Tofu Validate
       run: tofu validate
-    
+
     - name: Tofu Plan
       id: plan
       run: tofu plan -out=tfplan -no-color
@@ -62,4 +67,3 @@ jobs:
       id: apply
       if: ${{ inputs.auto_apply }}
       run: tofu apply -auto-approve tfplan
-        

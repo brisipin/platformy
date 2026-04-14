@@ -15,7 +15,7 @@ jobs:
       working_directory: ./env/staging
       auto_apply: false
     secrets: inherit
-  
+
   staging-test-bucket:
     uses: ./.github/workflows/shared.yml
     with:
@@ -32,7 +32,16 @@ jobs:
       auto_apply: false
     secrets: inherit
 
+  staging-supabase:
+    uses: ./.github/workflows/shared.yml
+    with:
+      environment: staging
+      working_directory: ./env/staging/supabase
+      auto_apply: false
+    secrets: inherit
+
   staging-brackets-app:
+    needs: staging-supabase
     uses: ./.github/workflows/shared.yml
     with:
       environment: staging

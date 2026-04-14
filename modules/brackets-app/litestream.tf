@@ -1,26 +1,4 @@
-resource "aws_s3_bucket" "litestream" {
-  bucket = "${var.name_prefix}-litestream"
-  tags   = var.tags
-}
-
-resource "aws_s3_bucket_public_access_block" "litestream" {
-  bucket = aws_s3_bucket.litestream.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-resource "aws_s3_bucket_versioning" "litestream" {
-  bucket = aws_s3_bucket.litestream.id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-# ── Analytics (Parquet output) ───────────────────────────────────────────────
+# ── Analytics (Parquet output from ETL) ─────────────────────────────────────
 
 resource "aws_s3_bucket" "analytics" {
   bucket = "${var.name_prefix}-analytics"
@@ -36,7 +14,7 @@ resource "aws_s3_bucket_public_access_block" "analytics" {
   restrict_public_buckets = true
 }
 
-# Grant GitHub Actions role: read from litestream, write to analytics
+# Grant the GitHub Actions role write access to analytics so ETL can push Parquet files.
 resource "aws_iam_role_policy" "github_etl" {
   count = length(var.github_actions_ecr_push_repositories) > 0 ? 1 : 0
 
@@ -46,14 +24,6 @@ resource "aws_iam_role_policy" "github_etl" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-      {
-        Effect = "Allow"
-        Action = ["s3:GetObject", "s3:ListBucket", "s3:GetBucketLocation"]
-        Resource = [
-          aws_s3_bucket.litestream.arn,
-          "${aws_s3_bucket.litestream.arn}/*",
-        ]
-      },
       {
         Effect = "Allow"
         Action = ["s3:PutObject", "s3:GetObject", "s3:DeleteObject", "s3:ListBucket", "s3:GetBucketLocation"]

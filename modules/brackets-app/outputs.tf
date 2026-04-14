@@ -56,7 +56,7 @@ output "github_oidc_provider_arn" {
 
 output "instance_id" {
   value       = aws_instance.app.id
-  description = "EC2 instance id (SQLite data on instance disk until you add backups)."
+  description = "EC2 instance ID."
 }
 
 output "cost_budget_id" {

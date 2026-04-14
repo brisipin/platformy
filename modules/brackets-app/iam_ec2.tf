@@ -34,26 +34,16 @@ resource "aws_iam_role_policy" "ec2" {
         Resource = aws_ecr_repository.app.arn
       },
       {
+        # Grants access to the JWT key and the Supabase DATABASE_URL.
+        # Secrets Manager appends a random suffix to ARNs, so we use a name-prefix wildcard.
         Effect = "Allow"
         Action = ["secretsmanager:GetSecretValue"]
         Resource = [
           aws_secretsmanager_secret.api_key.arn,
           aws_secretsmanager_secret.jwt_secret_key.arn,
+          "arn:aws:secretsmanager:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:secret:${var.name_prefix}/database-url*",
         ]
       },
-      {
-        Effect = "Allow"
-        Action = [
-          "s3:PutObject",
-          "s3:GetObject",
-          "s3:DeleteObject",
-          "s3:ListBucket",
-        ]
-        Resource = [
-          aws_s3_bucket.litestream.arn,
-          "${aws_s3_bucket.litestream.arn}/*",
-        ]
-      }
     ]
   })
 }
