@@ -4,6 +4,7 @@ exec > >(tee /var/log/brackets-user-data.log | logger -t user-data -s 2>/dev/con
 
 dnf install -y docker
 systemctl enable --now docker
+usermod -aG docker ec2-user
 
 REGION="${region}"
 IMAGE="${ecr_image_uri}"
