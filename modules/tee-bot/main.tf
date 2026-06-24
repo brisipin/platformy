@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    spot = {
+      source = "rackerlabs/spot"
+    }
+  }
+}
+
 resource "spot_cloudspace" "tee_bot" {
   name   = var.cloudspace_name
   region = var.region
