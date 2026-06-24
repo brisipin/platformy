@@ -21,7 +21,7 @@ resource "spot_spotnodepool" "core" {
   server_class = var.core_server_class
   bid_price    = var.core_bid_price
 
-  desired_nodes = var.core_desired_nodes
+  desired_server_count = var.core_desired_nodes
 
   labels = {
     "capacity-type" = "spot"
@@ -37,7 +37,7 @@ resource "spot_spotnodepool" "workers_spot" {
   server_class = var.workers_server_class
   bid_price    = var.workers_bid_price
 
-  desired_nodes = var.workers_desired_nodes
+  desired_server_count = var.workers_desired_nodes
 
   labels = {
     "capacity-type" = "spot"
