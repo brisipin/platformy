@@ -45,3 +45,27 @@ variable "workers_desired_nodes" {
   default     = 2
   description = "Desired node count for the spot workers nodepool."
 }
+
+variable "tags" {
+  type        = map(string)
+  default     = {}
+  description = "Extra tags for AWS resources."
+}
+
+variable "github_actions_ecr_push_repositories" {
+  type        = list(string)
+  default     = []
+  description = "GitHub repos allowed to assume the ECR push role (e.g. [\"myorg/my-backend\"]). Empty = no push role."
+}
+
+variable "create_github_oidc_provider" {
+  type        = bool
+  default     = false
+  description = "Create account-level GitHub OIDC provider. Set true only if it does not exist yet (one per AWS account)."
+}
+
+variable "github_oidc_provider_arn" {
+  type        = string
+  default     = ""
+  description = "Existing IAM OIDC provider ARN for https://token.actions.githubusercontent.com. Overrides lookup/create when set."
+}

@@ -3,6 +3,10 @@ terraform {
     spot = {
       source = "rackerlabs/spot"
     }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
   }
 }
 
