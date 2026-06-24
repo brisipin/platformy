@@ -16,7 +16,6 @@ resource "spot_cloudspace" "tee_bot" {
 
 resource "spot_spotnodepool" "core" {
   cloudspace_name = spot_cloudspace.tee_bot.name
-  name            = "core-spot"
 
   server_class = var.core_server_class
   bid_price    = var.core_bid_price
@@ -32,7 +31,6 @@ resource "spot_spotnodepool" "core" {
 
 resource "spot_spotnodepool" "workers_spot" {
   cloudspace_name = spot_cloudspace.tee_bot.name
-  name            = "workers-spot"
 
   server_class = var.workers_server_class
   bid_price    = var.workers_bid_price
