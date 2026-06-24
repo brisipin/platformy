@@ -32,6 +32,8 @@ jobs:
       # Supabase provider vars — only consumed by the supabase root; ignored elsewhere.
       TF_VAR_supabase_access_token: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       TF_VAR_supabase_organization_id: ${{ secrets.SUPABASE_ORGANIZATION_ID }}
+      # Rackspace Spot provider var — only consumed by the tee-bot root; ignored elsewhere.
+      TF_VAR_rackspace_spot_token: ${{ secrets.TF_VAR_RACKSPACE_SPOT_TOKEN }}
 
     steps:
     - name: Checkout code
