@@ -1,7 +1,8 @@
 resource "aws_s3_bucket" "frontend" {
-  count  = var.create_frontend_hosting ? 1 : 0
-  bucket = "${var.name_prefix}-frontend"
-  tags   = var.tags
+  count         = var.create_frontend_hosting ? 1 : 0
+  bucket        = "${var.name_prefix}-frontend"
+  force_destroy = true
+  tags          = var.tags
 }
 
 resource "aws_s3_bucket_public_access_block" "frontend" {

@@ -37,7 +37,7 @@ variable "github_app_repositories" {
 
 variable "create_github_oidc_provider" {
   type        = bool
-  default     = true
+  default     = false
   description = "Create GitHub OIDC provider in this account (once). Set false if it already exists; then use github_oidc_provider_arn or rely on data lookup."
 }
 

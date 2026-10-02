@@ -10,8 +10,9 @@ resource "aws_s3_bucket" "litestream" {
 # ── Analytics (Parquet output from ETL) ─────────────────────────────────────
 
 resource "aws_s3_bucket" "analytics" {
-  bucket = "${var.name_prefix}-analytics"
-  tags   = var.tags
+  bucket        = "${var.name_prefix}-analytics"
+  force_destroy = true
+  tags          = var.tags
 }
 
 resource "aws_s3_bucket_public_access_block" "analytics" {
@@ -26,8 +27,9 @@ resource "aws_s3_bucket_public_access_block" "analytics" {
 # ── Database backups (pg_dump → S3) ──────────────────────────────────────────
 
 resource "aws_s3_bucket" "backups" {
-  bucket = "${var.name_prefix}-backups"
-  tags   = var.tags
+  bucket        = "${var.name_prefix}-backups"
+  force_destroy = true
+  tags          = var.tags
 }
 
 resource "aws_s3_bucket_public_access_block" "backups" {
