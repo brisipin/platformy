@@ -14,6 +14,12 @@ output "database_url" {
   description = "Full PostgreSQL connection URL (postgresql://postgres:...@.../postgres). Set as DATABASE_URL."
 }
 
+output "database_password" {
+  value       = random_password.db.result
+  sensitive   = true
+  description = "Database password, for callers that build their own connection URL (e.g. through the pooler)."
+}
+
 output "database_url_secret_arn" {
   value       = aws_secretsmanager_secret.database_url.arn
   description = "AWS Secrets Manager ARN for the database URL. Grant EC2/Lambda GetSecretValue on this ARN."
