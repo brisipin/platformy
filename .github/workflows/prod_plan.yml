@@ -1,0 +1,17 @@
+name: Prod Plan
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  prod-affine:
+    uses: ./.github/workflows/shared.yml
+    with:
+      environment: prod
+      working_directory: ./env/prod/affine
+      auto_apply: false
+    secrets: inherit
